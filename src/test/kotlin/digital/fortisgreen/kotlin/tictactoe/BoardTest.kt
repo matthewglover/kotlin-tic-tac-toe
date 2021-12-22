@@ -6,8 +6,18 @@ import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 import java.util.stream.Stream
+import kotlin.test.assertEquals
 import kotlin.test.assertFalse
+import kotlin.test.assertNull
 import kotlin.test.assertTrue
+
+private val completeBoard = Board(
+    state = listOf(
+        PlayerMark.X, PlayerMark.X, PlayerMark.O,
+        PlayerMark.O, PlayerMark.O, PlayerMark.X,
+        PlayerMark.X, PlayerMark.O, PlayerMark.X,
+    )
+)
 
 internal class BoardTest {
 
@@ -65,13 +75,7 @@ internal class BoardTest {
 
     @Test
     internal fun `a board with all squares filled does not have available moves`() {
-        val board = Board(
-            state = listOf(
-                PlayerMark.X, PlayerMark.X, PlayerMark.O,
-                PlayerMark.O, PlayerMark.O, PlayerMark.X,
-                PlayerMark.X, PlayerMark.O, PlayerMark.X,
-            )
-        )
+        val board = completeBoard
 
         assertFalse(board.hasAvailableMoves())
     }
@@ -91,6 +95,57 @@ internal class BoardTest {
         val board = Board(state = boardState)
 
         assertTrue(board.hasWinner())
+    }
+
+    @Test
+    internal fun `next player is 'X' when board is empty`() {
+        val board = Board.Empty
+
+        assertEquals(PlayerMark.X, board.nextPlayer())
+    }
+
+    @Test
+    internal fun `next player is 'O' when number of squares taken is odd`() {
+        val board = Board(
+            state = listOf(
+                null, null, null,
+                null, PlayerMark.X, null,
+                null, null, null
+            )
+        )
+
+        assertEquals(PlayerMark.O, board.nextPlayer())
+    }
+
+    @Test
+    internal fun `next player is null when board has winner`() {
+        assertNull(completeBoard.nextPlayer())
+    }
+
+    @Test
+    internal fun `next player is null when board is complete`() {
+        val winningBoard = Board(
+            state = listOf(
+                null, PlayerMark.X, PlayerMark.O,
+                null, PlayerMark.X, PlayerMark.O,
+                null, PlayerMark.X, null,
+            )
+        )
+
+        assertNull(winningBoard.nextPlayer())
+    }
+
+    @Test
+    internal fun `next player is 'X' when number of squares taken is even`() {
+        val board = Board(
+            state = listOf(
+                null, null, null,
+                null, PlayerMark.X, PlayerMark.O,
+                null, null, null
+            )
+        )
+
+        assertEquals(PlayerMark.X, board.nextPlayer())
     }
 
     companion object {
