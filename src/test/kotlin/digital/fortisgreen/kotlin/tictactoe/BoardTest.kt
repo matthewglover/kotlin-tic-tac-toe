@@ -68,33 +68,26 @@ internal class BoardTest {
     }
 
     @Test
-    internal fun `an empty board has available moves`() {
+    internal fun `an empty board is active`() {
         val board = Board.Empty
-        assertTrue(board.hasAvailableMoves())
+        assertTrue(board.isActive())
     }
 
     @Test
-    internal fun `a board with all squares filled does not have available moves`() {
+    internal fun `a board with all squares filled is not active`() {
         val board = completeBoard
 
-        assertFalse(board.hasAvailableMoves())
-    }
-
-    @Test
-    internal fun `an empty board does not have a winner`() {
-        val board = Board.Empty
-
-        assertFalse(board.hasWinner())
+        assertFalse(board.isActive())
     }
 
     @ParameterizedTest
     @MethodSource("provideCompleteBoards")
-    internal fun `a board with a complete row or column or diagonal of Xs or Os has a winner`(
+    internal fun `a board with a complete row or column or diagonal of Xs or Os is not active`(
         boardState: List<PlayerMark?>
     ) {
         val board = Board(state = boardState)
 
-        assertTrue(board.hasWinner())
+        assertFalse(board.isActive())
     }
 
     @Test

@@ -12,10 +12,9 @@ import kotlin.test.assertTrue
 class GameTest {
 
     @Test
-    internal fun `a game is active when it has a Board without a winner and with available moves`() {
+    internal fun `a game is active when it has a board that is active`() {
         val board = mockk<Board>()
-        every { board.hasWinner() } returns false
-        every { board.hasAvailableMoves() } returns true
+        every { board.isActive() } returns true
 
         val playerX = mockk<Player>()
         val playerO = mockk<Player>()
@@ -26,23 +25,9 @@ class GameTest {
     }
 
     @Test
-    internal fun `a game is not active when it has a Board with a winner`() {
+    internal fun `a game is not active when it has a board that is not active`() {
         val board = mockk<Board>()
-        every { board.hasWinner() } returns true
-
-        val playerX = mockk<Player>()
-        val playerO = mockk<Player>()
-
-        val game = Game(board, playerX, playerO)
-
-        assertFalse(game.isActive())
-    }
-
-    @Test
-    internal fun `a game is not active when it has a Board without a winner or available moves`() {
-        val board = mockk<Board>()
-        every { board.hasWinner() } returns false
-        every { board.hasAvailableMoves() } returns false
+        every { board.isActive() } returns false
 
         val playerX = mockk<Player>()
         val playerO = mockk<Player>()

@@ -33,12 +33,10 @@ data class Board(private val state: List<PlayerMark?>) {
         }
     }
 
-    fun hasWinner(): Boolean = lines().any { it.isWinner() }
-
-    fun hasAvailableMoves(): Boolean = totalMoves() < TotalSquares
+    fun isActive(): Boolean = hasAvailableMoves() && !hasWinner()
 
     fun nextPlayer(): PlayerMark? {
-        if (hasWinner() || !hasAvailableMoves()) {
+        if (!isActive()) {
             return null
         }
 
@@ -47,6 +45,10 @@ data class Board(private val state: List<PlayerMark?>) {
             else -> PlayerMark.O
         }
     }
+
+    private fun hasWinner(): Boolean = lines().any { it.isWinner() }
+
+    private fun hasAvailableMoves(): Boolean = totalMoves() < TotalSquares
 
     private fun totalMoves(): Int = state.filterNotNull().size
 

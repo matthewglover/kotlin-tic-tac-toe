@@ -8,7 +8,7 @@ class Game(
     private val playerO: Player
 ) {
 
-    fun isActive(): Boolean = !board.hasWinner() && board.hasAvailableMoves()
+    fun isActive(): Boolean = board.isActive()
 
     fun playNextMove() {
         board.nextPlayer()?.let { playerMark ->
