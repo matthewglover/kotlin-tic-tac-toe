@@ -1,3 +1,5 @@
 package digital.fortisgreen.kotlin.tictactoe
 
-internal class BoardTest
+enum class PlayerMark {
+    X, Y
+}
