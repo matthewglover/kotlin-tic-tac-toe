@@ -28,6 +28,7 @@ dependencies {
 
     val arrowVersion: String by project
     val detektVersion: String by project
+    val junitVersion: String by project
     val mockkVersion: String by project
 
     // Utility libraries
@@ -36,6 +37,7 @@ dependencies {
     // Test
     testImplementation(kotlin("test"))
     testImplementation("io.mockk:mockk:$mockkVersion")
+    testImplementation("org.junit.jupiter:junit-jupiter-params:$junitVersion")
 
     // Plugin configuration
     detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:$detektVersion")
