@@ -26,11 +26,11 @@ data class Board(val state: List<PlayerMark?>) {
         val os = state.filter { square -> square == PlayerMark.O }
 
         if (os.size > xs.size) {
-            throw InvalidBoardCreationException("More Ys than Xs")
+            throw InvalidBoardCreationException("More Os than Xs")
         }
 
         if (xs.size > os.size + 1) {
-            throw InvalidBoardCreationException("Too many Xs (${xs.size}) compared to Ys (${os.size})")
+            throw InvalidBoardCreationException("Too many Xs (${xs.size}) compared to Os (${os.size})")
         }
     }
 
