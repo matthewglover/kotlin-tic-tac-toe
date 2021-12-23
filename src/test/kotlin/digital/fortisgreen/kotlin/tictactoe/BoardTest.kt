@@ -1,10 +1,12 @@
 package digital.fortisgreen.kotlin.tictactoe
 
 import digital.fortisgreen.kotlin.tictactoe.exceptions.InvalidBoardCreationException
+import digital.fortisgreen.kotlin.tictactoe.exceptions.InvalidMoveException
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
+import org.junit.jupiter.params.provider.ValueSource
 import java.util.stream.Stream
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
@@ -139,6 +141,50 @@ internal class BoardTest {
         )
 
         assertEquals(PlayerMark.X, board.nextPlayer())
+    }
+
+    @Test
+    internal fun `making a valid move return new board with square taken by next player`() {
+        val board = Board(
+            state = listOf(
+                null, null, null,
+                null, null, null,
+                null, null, null
+            )
+        )
+
+        val updatedBoard = Board(
+            state = listOf(
+                null, null, null,
+                null, null, null,
+                null, null, PlayerMark.X
+            )
+        )
+
+        assertEquals(updatedBoard, board.move(9))
+    }
+
+    @Test
+    internal fun `making a move to a taken square throws InvalidMoveException`() {
+        val board = Board(
+            state = listOf(
+                null, null, null,
+                null, PlayerMark.X, PlayerMark.O,
+                null, null, null
+            )
+        )
+
+        assertThrows<InvalidMoveException> {
+            board.move(5)
+        }
+    }
+
+    @ParameterizedTest
+    @ValueSource(ints = [0, 10, -1])
+    internal fun `making a move to a square out of range throws InvalidMoveException`(square: Int) {
+        assertThrows<InvalidMoveException> {
+            Board.Empty.move(square)
+        }
     }
 
     companion object {

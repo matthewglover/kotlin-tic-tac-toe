@@ -43,6 +43,16 @@ dependencies {
     detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:$detektVersion")
 }
 
+tasks.jar {
+    manifest {
+        attributes["Main-Class"] = "MainKt"
+    }
+    configurations["compileClasspath"].forEach { file: File ->
+        from(zipTree(file.absoluteFile))
+    }
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
+}
+
 tasks.test {
     useJUnitPlatform()
 }
@@ -59,7 +69,7 @@ tasks.withType<KotlinCompile> {
     kotlinOptions {
         // NOTE: unrestricted-builder-inference flag will be default in kotlin 1.6
         // See: https://kotlinlang.org/docs/whatsnew1530.html#eliminating-builder-inference-restrictions
-        freeCompilerArgs = listOf("-Xjsr305=strict", "-Xself-upper-bound-inference")
+        freeCompilerArgs = listOf("-Xjsr305=strict", "-Xself-upper-bound-inference", "-progressive")
         jvmTarget = "11"
     }
 }

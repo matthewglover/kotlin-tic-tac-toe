@@ -1,9 +1,10 @@
 package digital.fortisgreen.kotlin.tictactoe
 
 import digital.fortisgreen.kotlin.tictactoe.exceptions.InvalidBoardCreationException
+import digital.fortisgreen.kotlin.tictactoe.exceptions.InvalidMoveException
 
-@Suppress("UnusedPrivateMember")
-data class Board(private val state: List<PlayerMark?>) {
+@Suppress("TooManyFunctions")
+data class Board(val state: List<PlayerMark?>) {
 
     companion object {
 
@@ -17,7 +18,7 @@ data class Board(private val state: List<PlayerMark?>) {
         if (state.size != TotalSquares) {
             throw InvalidBoardCreationException(
                 "Incorrect number of squares in state: $state. " +
-                    "Expected $TotalSquares,  recieved: ${state.size}"
+                    "Expected $TotalSquares,  received: ${state.size}"
             )
         }
 
@@ -45,6 +46,37 @@ data class Board(private val state: List<PlayerMark?>) {
             else -> PlayerMark.O
         }
     }
+
+    fun move(selectedSquare: Int): Board {
+        if (!isOnBoard(selectedSquare)) {
+            throw InvalidMoveException("Square `$selectedSquare` is not on the board")
+        }
+
+        if (isTaken(selectedSquare)) {
+            throw InvalidMoveException("Square `$selectedSquare` is already taken")
+        }
+
+        val playerMark = nextPlayer()
+
+        val newState = state.mapIndexed { currentIndex, squareValue ->
+            if (currentIndex + 1 == selectedSquare) playerMark else squareValue
+        }
+
+        return Board(newState)
+    }
+
+    fun validateMove(selectedSquare: Int): InvalidMoveType? =
+        if (!isOnBoard(selectedSquare)) {
+            InvalidMoveType.OUT_OF_BOUNDS
+        } else if (isTaken(selectedSquare)) {
+            InvalidMoveType.SQUARE_TAKEN
+        } else {
+            null
+        }
+
+    private fun isOnBoard(selectedSquare: Int): Boolean = (1..TotalSquares).contains(selectedSquare)
+
+    private fun isTaken(selectedSquare: Int): Boolean = state[selectedSquare - 1] != null
 
     private fun hasWinner(): Boolean = lines().any { it.isWinner() }
 
