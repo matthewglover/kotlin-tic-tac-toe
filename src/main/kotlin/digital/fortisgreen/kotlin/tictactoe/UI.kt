@@ -2,7 +2,7 @@ package digital.fortisgreen.kotlin.tictactoe
 
 typealias InvalidMoveData = Pair<Int?, InvalidMoveType>
 
-class UI(private val boardRenderer: BoardRenderer) {
+class UI {
 
     fun requestMove(board: Board, invalidMoveData: InvalidMoveData?): Int {
         clearScreen()
@@ -48,7 +48,7 @@ class UI(private val boardRenderer: BoardRenderer) {
     }
 
     private fun displayBoard(board: Board) {
-        val renderedBoard = boardRenderer.render(board)
+        val renderedBoard = BoardRenderer.render(board)
 
         renderedBoard.forEach { println(it) }
     }

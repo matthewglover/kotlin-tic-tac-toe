@@ -8,8 +8,6 @@ internal class BoardRendererTest {
 
     @Test
     internal fun `renders empty board`() {
-        val boardRenderer = BoardRenderer()
-
         val expected = listOf(
             " ${AnsiColours.YELLOW.apply("1")} ${AnsiColours.YELLOW.apply("|")} ${AnsiColours.YELLOW.apply("2")} ${AnsiColours.YELLOW.apply("|")} ${AnsiColours.YELLOW.apply("3")} ",
             AnsiColours.YELLOW.apply("-----------"),
@@ -18,13 +16,11 @@ internal class BoardRendererTest {
             " ${AnsiColours.YELLOW.apply("7")} ${AnsiColours.YELLOW.apply("|")} ${AnsiColours.YELLOW.apply("8")} ${AnsiColours.YELLOW.apply("|")} ${AnsiColours.YELLOW.apply("9")} ",
         )
 
-        assertEquals(expected, boardRenderer.render(Board.Empty))
+        assertEquals(expected, BoardRenderer.render(Board.Empty))
     }
 
     @Test
     internal fun `renders complete board`() {
-        val boardRenderer = BoardRenderer()
-
         val completeBoard = Board(
             state = listOf(
                 PlayerMark.X, PlayerMark.X, PlayerMark.O,
@@ -41,6 +37,6 @@ internal class BoardRendererTest {
             " ${AnsiColours.GREEN.apply("X")} ${AnsiColours.YELLOW.apply("|")} ${AnsiColours.BLUE.apply("O")} ${AnsiColours.YELLOW.apply("|")} ${AnsiColours.GREEN.apply("X")} ",
         )
 
-        assertEquals(expected, boardRenderer.render(completeBoard))
+        assertEquals(expected, BoardRenderer.render(completeBoard))
     }
 }

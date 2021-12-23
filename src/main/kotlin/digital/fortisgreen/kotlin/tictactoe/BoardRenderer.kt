@@ -1,11 +1,9 @@
 package digital.fortisgreen.kotlin.tictactoe
 
-class BoardRenderer {
+object BoardRenderer {
 
-    companion object {
-        val RowDivider = AnsiColours.YELLOW.apply("-----------")
-        val ColumnDivider = AnsiColours.YELLOW.apply("|")
-    }
+    val RowDivider = AnsiColours.YELLOW.apply("-----------")
+    val ColumnDivider = AnsiColours.YELLOW.apply("|")
 
     fun render(board: Board): List<String> =
         renderRows(board).intersperse(RowDivider)
