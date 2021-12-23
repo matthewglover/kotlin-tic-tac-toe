@@ -8,9 +8,11 @@ fun main() {
 
     val boardRenderer = BoardRenderer()
     val ui = UI(boardRenderer)
-    val game = Game(board = Board.Empty, playerO = Player(ui), playerX = Player(ui))
+    val game = Game(board = Board.Empty, playerX = Player(ui), playerO = Player(ui), ui = ui)
 
     while (game.isActive()) {
         game.playNextMove()
     }
+
+    game.finish()
 }

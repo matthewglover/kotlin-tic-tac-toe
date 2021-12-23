@@ -6,11 +6,26 @@ class UI(private val boardRenderer: BoardRenderer) {
 
     fun requestMove(board: Board, invalidMoveData: InvalidMoveData?): Int {
         clearScreen()
+
         displayBoard(board)
 
         invalidMoveData?.run { displayInvalidMoveTip(invalidMoveData) }
 
         return requestInput() ?: requestMove(board, Pair(null, InvalidMoveType.UNREADABLE_INPUT))
+    }
+
+    fun endGame(board: Board) {
+        clearScreen()
+
+        displayBoard(board)
+
+        val winner = board.winner()
+
+        if (winner == null) {
+            displayDrawMessage()
+        } else {
+            displayWinnerMessage(winner)
+        }
     }
 
     private fun requestInput(): Int? {
@@ -40,5 +55,13 @@ class UI(private val boardRenderer: BoardRenderer) {
 
     private fun clearScreen() {
         print("\u001b[H\u001b[2J")
+    }
+
+    private fun displayDrawMessage() {
+        println("It's a draw!")
+    }
+
+    private fun displayWinnerMessage(winner: PlayerMark) {
+        println("$winner wins!")
     }
 }

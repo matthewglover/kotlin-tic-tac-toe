@@ -20,4 +20,6 @@ class Line(private val state: List<PlayerMark?>) {
     fun isWinner(): Boolean {
         return state.all { it != null } && state.distinct().size == 1
     }
+
+    fun playerMark(): PlayerMark? = if (isWinner()) state.first() else null
 }

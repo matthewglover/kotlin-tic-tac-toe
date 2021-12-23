@@ -5,6 +5,7 @@ import digital.fortisgreen.kotlin.tictactoe.exceptions.InvalidMoveException
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
 import org.junit.jupiter.params.provider.ValueSource
 import java.util.stream.Stream
@@ -187,6 +188,22 @@ internal class BoardTest {
         }
     }
 
+    @ParameterizedTest
+    @MethodSource("provideWinningBoards")
+    internal fun `a winning board reports winner`(expected: PlayerMark, board: Board) {
+        assertEquals(expected, board.winner())
+    }
+
+    @Test
+    internal fun `a drawn board does not have a winner`() {
+        assertNull(completeBoard.winner())
+    }
+
+    @Test
+    internal fun `an incomplete board does not have a winner`() {
+        assertNull(Board.Empty.winner())
+    }
+
     companion object {
 
         @JvmStatic
@@ -226,6 +243,31 @@ internal class BoardTest {
                 null, PlayerMark.O, PlayerMark.X,
                 null, PlayerMark.X, PlayerMark.O,
                 PlayerMark.X, PlayerMark.O, null,
+            ),
+        )
+
+        @JvmStatic
+        @Suppress("UnusedPrivateMember")
+        private fun provideWinningBoards() = Stream.of(
+            Arguments.of(
+                PlayerMark.X,
+                Board(
+                    state = listOf(
+                        PlayerMark.X, PlayerMark.X, PlayerMark.X,
+                        PlayerMark.O, PlayerMark.O, null,
+                        null, null, null,
+                    )
+                )
+            ),
+            Arguments.of(
+                PlayerMark.O,
+                Board(
+                    state = listOf(
+                        PlayerMark.O, PlayerMark.O, PlayerMark.O,
+                        PlayerMark.X, PlayerMark.X, null,
+                        PlayerMark.X, null, null,
+                    )
+                )
             ),
         )
     }

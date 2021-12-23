@@ -74,6 +74,8 @@ data class Board(val state: List<PlayerMark?>) {
             null
         }
 
+    fun winner(): PlayerMark? = lines().find { it.isWinner() }?.playerMark()
+
     private fun isOnBoard(selectedSquare: Int): Boolean = (1..TotalSquares).contains(selectedSquare)
 
     private fun isTaken(selectedSquare: Int): Boolean = state[selectedSquare - 1] != null

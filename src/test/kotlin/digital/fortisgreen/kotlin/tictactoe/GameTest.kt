@@ -1,11 +1,19 @@
 package digital.fortisgreen.kotlin.tictactoe
 
 import digital.fortisgreen.kotlin.tictactoe.exceptions.GameAlreadyCompleteException
+import digital.fortisgreen.kotlin.tictactoe.exceptions.GameNotOverException
+import io.mockk.Runs
 import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
+import io.mockk.verify
 import io.mockk.verifyOrder
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.Arguments
+import org.junit.jupiter.params.provider.MethodSource
+import java.util.stream.Stream
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
@@ -19,7 +27,9 @@ class GameTest {
         val playerX = mockk<Player>()
         val playerO = mockk<Player>()
 
-        val newGame = Game(board, playerX, playerO)
+        val ui = mockk<UI>()
+
+        val newGame = Game(board = board, playerX = playerX, playerO = playerO, ui = ui)
 
         assertTrue(newGame.isActive())
     }
@@ -32,7 +42,9 @@ class GameTest {
         val playerX = mockk<Player>()
         val playerO = mockk<Player>()
 
-        val game = Game(board, playerX, playerO)
+        val ui = mockk<UI>()
+
+        val game = Game(board = board, playerX = playerX, playerO = playerO, ui = ui)
 
         assertFalse(game.isActive())
     }
@@ -87,7 +99,9 @@ class GameTest {
         every { playerO.move(board2) } returns board3
         every { playerO.move(board4) } returns board5
 
-        val game = Game(board = board, playerX = playerX, playerO = playerO)
+        val ui = mockk<UI>()
+
+        val game = Game(board = board, playerX = playerX, playerO = playerO, ui = ui)
 
         game.playNextMove()
         game.playNextMove()
@@ -108,5 +122,71 @@ class GameTest {
             playerO.move(board4)
             playerX.move(board5)
         }
+    }
+
+    @Test
+    internal fun `finishing a game with an active board throws a GameNotOverException`() {
+        val board = mockk<Board>()
+        every { board.isActive() } returns true
+
+        val playerX = mockk<Player>()
+        val playerO = mockk<Player>()
+
+        val ui = mockk<UI>()
+
+        val game = Game(board = board, playerX = playerX, playerO = playerO, ui = ui)
+
+        assertThrows<GameNotOverException> {
+            game.finish()
+        }
+    }
+
+    @ParameterizedTest
+    @MethodSource("completedBoards")
+    internal fun `an inactive game calls UI endGame with current board`(board: Board) {
+        val playerX = mockk<Player>()
+        val playerO = mockk<Player>()
+
+        val ui = mockk<UI>()
+        every { ui.endGame(board) } just Runs
+
+        val game = Game(board = board, playerX = playerX, playerO = playerO, ui = ui)
+
+        game.finish()
+
+        verify(exactly = 1) { ui.endGame(board) }
+    }
+
+    companion object {
+        @JvmStatic
+        fun completedBoards(): Stream<Arguments> = Stream.of(
+            Arguments.of(
+                Board(
+                    state = listOf(
+                        PlayerMark.X, PlayerMark.X, PlayerMark.O,
+                        PlayerMark.O, PlayerMark.O, PlayerMark.X,
+                        PlayerMark.X, PlayerMark.O, PlayerMark.X,
+                    )
+                )
+            ),
+            Arguments.of(
+                Board(
+                    state = listOf(
+                        PlayerMark.X, PlayerMark.X, PlayerMark.X,
+                        PlayerMark.O, PlayerMark.O, null,
+                        null, null, null,
+                    )
+                )
+            ),
+            Arguments.of(
+                Board(
+                    state = listOf(
+                        PlayerMark.X, PlayerMark.X, null,
+                        PlayerMark.O, PlayerMark.O, PlayerMark.O,
+                        PlayerMark.X, null, null,
+                    )
+                )
+            ),
+        )
     }
 }
