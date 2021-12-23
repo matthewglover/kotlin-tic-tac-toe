@@ -1,19 +1,21 @@
+@file:Suppress("MaxLineLength", "MaximumLineLength")
 package digital.fortisgreen.kotlin.tictactoe
 
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 
 internal class BoardRendererTest {
+
     @Test
     internal fun `renders empty board`() {
         val boardRenderer = BoardRenderer()
 
         val expected = listOf(
-            " 1 | 2 | 3 ",
-            " -   -   - ",
-            " 4 | 5 | 6 ",
-            " -   -   - ",
-            " 7 | 8 | 9 ",
+            " ${AnsiColours.YELLOW.apply("1")} ${AnsiColours.YELLOW.apply("|")} ${AnsiColours.YELLOW.apply("2")} ${AnsiColours.YELLOW.apply("|")} ${AnsiColours.YELLOW.apply("3")} ",
+            AnsiColours.YELLOW.apply("-----------"),
+            " ${AnsiColours.YELLOW.apply("4")} ${AnsiColours.YELLOW.apply("|")} ${AnsiColours.YELLOW.apply("5")} ${AnsiColours.YELLOW.apply("|")} ${AnsiColours.YELLOW.apply("6")} ",
+            AnsiColours.YELLOW.apply("-----------"),
+            " ${AnsiColours.YELLOW.apply("7")} ${AnsiColours.YELLOW.apply("|")} ${AnsiColours.YELLOW.apply("8")} ${AnsiColours.YELLOW.apply("|")} ${AnsiColours.YELLOW.apply("9")} ",
         )
 
         assertEquals(expected, boardRenderer.render(Board.Empty))
@@ -32,11 +34,11 @@ internal class BoardRendererTest {
         )
 
         val expected = listOf(
-            " X | X | O ",
-            " -   -   - ",
-            " O | O | X ",
-            " -   -   - ",
-            " X | O | X ",
+            " ${AnsiColours.GREEN.apply("X")} ${AnsiColours.YELLOW.apply("|")} ${AnsiColours.GREEN.apply("X")} ${AnsiColours.YELLOW.apply("|")} ${AnsiColours.BLUE.apply("O")} ",
+            AnsiColours.YELLOW.apply("-----------"),
+            " ${AnsiColours.BLUE.apply("O")} ${AnsiColours.YELLOW.apply("|")} ${AnsiColours.BLUE.apply("O")} ${AnsiColours.YELLOW.apply("|")} ${AnsiColours.GREEN.apply("X")} ",
+            AnsiColours.YELLOW.apply("-----------"),
+            " ${AnsiColours.GREEN.apply("X")} ${AnsiColours.YELLOW.apply("|")} ${AnsiColours.BLUE.apply("O")} ${AnsiColours.YELLOW.apply("|")} ${AnsiColours.GREEN.apply("X")} ",
         )
 
         assertEquals(expected, boardRenderer.render(completeBoard))
