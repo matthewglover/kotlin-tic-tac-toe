@@ -14,7 +14,11 @@ Method -
 
 ## Quick Start
 
-[todo]
+Pre-requisites: Java 16+
+
+First, build the application: `./gradlew build`
+
+Then run the jar: `java -jar build/libs/TicTacToe-1.0-SNAPSHOT.jar`
 
 ## Static Analysis
 
@@ -52,6 +56,8 @@ To run tasks:
 To run the tests: `./gradlew test`
 
 ## Check task
+
+To run all checks: `./gradlew check`
 
 The check task is configured to run:
 
