@@ -1,7 +1,8 @@
 package digital.fortisgreen.kotlin.tictactoe
 
+import arrow.core.left
+import arrow.core.right
 import digital.fortisgreen.kotlin.tictactoe.exceptions.InvalidBoardCreationException
-import digital.fortisgreen.kotlin.tictactoe.exceptions.InvalidMoveException
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.params.ParameterizedTest
@@ -162,11 +163,12 @@ internal class BoardTest {
             )
         )
 
-        assertEquals(updatedBoard, board.move(9))
+        assertEquals(updatedBoard.right(), board.move(9))
     }
 
-    @Test
-    internal fun `making a move to a taken square throws InvalidMoveException`() {
+    @ParameterizedTest
+    @ValueSource(ints = [5, 6])
+    internal fun `making a move to a taken square returns a right of SquareTaken`(square: Int) {
         val board = Board(
             state = listOf(
                 null, null, null,
@@ -175,17 +177,18 @@ internal class BoardTest {
             )
         )
 
-        assertThrows<InvalidMoveException> {
-            board.move(5)
-        }
+        assertEquals(SquareTaken(square).left(), board.move(square))
     }
 
     @ParameterizedTest
     @ValueSource(ints = [0, 10, -1])
-    internal fun `making a move to a square out of range throws InvalidMoveException`(square: Int) {
-        assertThrows<InvalidMoveException> {
-            Board.Empty.move(square)
-        }
+    internal fun `making a move to a square out of range returns a right of OutOfBounds`(square: Int) {
+        assertEquals(OutOfBounds(square).left(), Board.Empty.move(square))
+    }
+
+    @Test
+    internal fun `making a null move returns right of UnreadableInput`() {
+        assertEquals(UnreadableInput.left(), Board.Empty.move(null))
     }
 
     @ParameterizedTest

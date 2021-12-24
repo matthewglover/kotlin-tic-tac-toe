@@ -1,7 +1,9 @@
 package digital.fortisgreen.kotlin.tictactoe
 
+import arrow.core.Either
+import arrow.core.left
+import arrow.core.right
 import digital.fortisgreen.kotlin.tictactoe.exceptions.InvalidBoardCreationException
-import digital.fortisgreen.kotlin.tictactoe.exceptions.InvalidMoveException
 
 @Suppress("TooManyFunctions")
 data class Board(val state: List<PlayerMark?>) {
@@ -47,31 +49,19 @@ data class Board(val state: List<PlayerMark?>) {
         }
     }
 
-    fun move(selectedSquare: Int): Board {
-        if (!isOnBoard(selectedSquare)) {
-            throw InvalidMoveException("Square `$selectedSquare` is not on the board")
-        }
-
-        if (isTaken(selectedSquare)) {
-            throw InvalidMoveException("Square `$selectedSquare` is already taken")
-        }
-
-        val playerMark = nextPlayer()
-
-        val newState = state.mapIndexed { currentIndex, squareValue ->
-            if (currentIndex + 1 == selectedSquare) playerMark else squareValue
-        }
-
-        return Board(newState)
-    }
-
-    fun validateMove(selectedSquare: Int): InvalidMoveType? =
-        if (!isOnBoard(selectedSquare)) {
-            InvalidMoveType.OUT_OF_BOUNDS
+    fun move(selectedSquare: Int?): Either<InvalidMove, Board> =
+        if (selectedSquare == null) {
+            UnreadableInput.left()
+        } else if (!isOnBoard(selectedSquare)) {
+            OutOfBounds(selectedSquare).left()
         } else if (isTaken(selectedSquare)) {
-            InvalidMoveType.SQUARE_TAKEN
+            SquareTaken(selectedSquare).left()
         } else {
-            null
+            val playerMark = nextPlayer()
+            val newState = state.mapIndexed { currentIndex, squareValue ->
+                if (currentIndex + 1 == selectedSquare) playerMark else squareValue
+            }
+            Board(newState).right()
         }
 
     fun winner(): PlayerMark? = lines().find { it.isWinner() }?.playerMark()

@@ -2,22 +2,17 @@ package digital.fortisgreen.kotlin.tictactoe
 
 import io.mockk.every
 import io.mockk.mockk
-import io.mockk.verifyOrder
+import io.mockk.verify
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 
 internal class PlayerTest {
 
     @Test
-    internal fun `when player selects a valid move the first time, returns new board with move updated`() {
+    internal fun `player call ui for next move`() {
         val board = Board.Empty
 
-        val ui = mockk<UI>()
-        every { ui.requestMove(board, null) } returns 2
-
-        val player = Player(ui)
-
-        val boardAfterMove = Board(
+        val nextBoard = Board(
             state = listOf(
                 null, PlayerMark.X, null,
                 null, null, null,
@@ -25,35 +20,13 @@ internal class PlayerTest {
             )
         )
 
-        assertEquals(boardAfterMove, player.move(board))
-
-        verifyOrder {
-            ui.requestMove(board, null)
-        }
-    }
-
-    @Test
-    internal fun `when player selects an invalid move the first time, alerts user then requests valid move`() {
-        val board = Board.Empty
-
         val ui = mockk<UI>()
-        every { ui.requestMove(board, any()) } answers { if (secondArg<InvalidMoveData?>() == null) 10 else 2 }
+        every { ui.requestMove(board) } returns nextBoard
 
         val player = Player(ui)
 
-        val boardAfterMove = Board(
-            state = listOf(
-                null, PlayerMark.X, null,
-                null, null, null,
-                null, null, null,
-            )
-        )
+        assertEquals(nextBoard, player.move(board))
 
-        assertEquals(boardAfterMove, player.move(board))
-
-        verifyOrder {
-            ui.requestMove(board, null)
-            ui.requestMove(board, Pair(10, InvalidMoveType.OUT_OF_BOUNDS))
-        }
+        verify(exactly = 1) { ui.requestMove(board, null) }
     }
 }

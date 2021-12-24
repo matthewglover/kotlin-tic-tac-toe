@@ -1,17 +1,21 @@
 package digital.fortisgreen.kotlin.tictactoe
 
-typealias InvalidMoveData = Pair<Int?, InvalidMoveType>
-
 class UI {
 
-    fun requestMove(board: Board, invalidMoveData: InvalidMoveData?): Int {
+    fun requestMove(board: Board, invalidMove: InvalidMove? = null): Board {
         clearScreen()
 
         displayBoard(board)
 
-        invalidMoveData?.run { displayInvalidMoveTip(invalidMoveData) }
+        invalidMove?.run { displayInvalidMoveTip(invalidMove) }
 
-        return requestInput() ?: requestMove(board, Pair(null, InvalidMoveType.UNREADABLE_INPUT))
+        val selectedSquare = requestInput()
+
+        return board.move(selectedSquare)
+            .fold(
+                { newInvalidMove -> requestMove(board, newInvalidMove) },
+                { it }
+            )
     }
 
     fun endGame(board: Board) {
@@ -34,15 +38,13 @@ class UI {
         return readln().toIntOrNull()
     }
 
-    private fun displayInvalidMoveTip(invalidMoveData: InvalidMoveData) {
-        val (invalidMove, invalidMoveType) = invalidMoveData
-
-        when (invalidMoveType) {
-            InvalidMoveType.OUT_OF_BOUNDS ->
-                println("Oops square `$invalidMove` is not on the board. Please try again.")
-            InvalidMoveType.SQUARE_TAKEN ->
-                println("Oops square `$invalidMove` is already taken. Please try again.")
-            InvalidMoveType.UNREADABLE_INPUT ->
+    private fun displayInvalidMoveTip(invalidMove: InvalidMove) {
+        when (invalidMove) {
+            is OutOfBounds ->
+                println("Oops square `${invalidMove.selectedSquare}` is not on the board. Please try again.")
+            is SquareTaken ->
+                println("Oops square `${invalidMove.selectedSquare}` is already taken. Please try again.")
+            is UnreadableInput ->
                 println("Oops could not read input as a square. Please try again.")
         }
     }
