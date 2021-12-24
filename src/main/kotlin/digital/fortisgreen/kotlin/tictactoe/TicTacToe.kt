@@ -3,7 +3,7 @@ package digital.fortisgreen.kotlin.tictactoe
 import digital.fortisgreen.kotlin.tictactoe.exceptions.GameAlreadyCompleteException
 import digital.fortisgreen.kotlin.tictactoe.exceptions.GameNotOverException
 
-class Game(
+class TicTacToe(
     private var board: Board,
     private val playerX: Player,
     private val playerO: Player,
