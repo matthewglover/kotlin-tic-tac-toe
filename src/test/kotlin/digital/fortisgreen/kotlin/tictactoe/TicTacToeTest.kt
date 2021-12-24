@@ -27,9 +27,9 @@ class TicTacToeTest {
         val playerX = mockk<Player>()
         val playerO = mockk<Player>()
 
-        val ui = mockk<UI>()
+        val ticTacToeUi = mockk<TicTacToeUI>()
 
-        val newGame = TicTacToe(board = board, playerX = playerX, playerO = playerO, ui = ui)
+        val newGame = TicTacToe(board = board, playerX = playerX, playerO = playerO, ticTacToeUi = ticTacToeUi)
 
         assertTrue(newGame.isActive())
     }
@@ -42,9 +42,9 @@ class TicTacToeTest {
         val playerX = mockk<Player>()
         val playerO = mockk<Player>()
 
-        val ui = mockk<UI>()
+        val ticTacToeUi = mockk<TicTacToeUI>()
 
-        val game = TicTacToe(board = board, playerX = playerX, playerO = playerO, ui = ui)
+        val game = TicTacToe(board = board, playerX = playerX, playerO = playerO, ticTacToeUi = ticTacToeUi)
 
         assertFalse(game.isActive())
     }
@@ -99,9 +99,9 @@ class TicTacToeTest {
         every { playerO.move(board2) } returns board3
         every { playerO.move(board4) } returns board5
 
-        val ui = mockk<UI>()
+        val ticTacToeUi = mockk<TicTacToeUI>()
 
-        val game = TicTacToe(board = board, playerX = playerX, playerO = playerO, ui = ui)
+        val game = TicTacToe(board = board, playerX = playerX, playerO = playerO, ticTacToeUi = ticTacToeUi)
 
         game.playNextMove()
         game.playNextMove()
@@ -132,9 +132,9 @@ class TicTacToeTest {
         val playerX = mockk<Player>()
         val playerO = mockk<Player>()
 
-        val ui = mockk<UI>()
+        val ticTacToeUi = mockk<TicTacToeUI>()
 
-        val game = TicTacToe(board = board, playerX = playerX, playerO = playerO, ui = ui)
+        val game = TicTacToe(board = board, playerX = playerX, playerO = playerO, ticTacToeUi = ticTacToeUi)
 
         assertThrows<GameNotOverException> {
             game.finish()
@@ -147,14 +147,14 @@ class TicTacToeTest {
         val playerX = mockk<Player>()
         val playerO = mockk<Player>()
 
-        val ui = mockk<UI>()
-        every { ui.endGame(board) } just Runs
+        val ticTacToeUi = mockk<TicTacToeUI>()
+        every { ticTacToeUi.endGame(board) } just Runs
 
-        val game = TicTacToe(board = board, playerX = playerX, playerO = playerO, ui = ui)
+        val game = TicTacToe(board = board, playerX = playerX, playerO = playerO, ticTacToeUi = ticTacToeUi)
 
         game.finish()
 
-        verify(exactly = 1) { ui.endGame(board) }
+        verify(exactly = 1) { ticTacToeUi.endGame(board) }
     }
 
     companion object {

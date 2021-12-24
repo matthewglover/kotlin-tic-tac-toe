@@ -1,6 +1,6 @@
 package digital.fortisgreen.kotlin.tictactoe
 
-class UI {
+class TicTacToeUI {
 
     fun requestMove(board: Board, invalidMove: InvalidMove? = null): Board {
         clearScreen()

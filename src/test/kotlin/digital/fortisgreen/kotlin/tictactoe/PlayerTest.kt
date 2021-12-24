@@ -20,13 +20,13 @@ internal class PlayerTest {
             )
         )
 
-        val ui = mockk<UI>()
-        every { ui.requestMove(board) } returns nextBoard
+        val ticTacToeUi = mockk<TicTacToeUI>()
+        every { ticTacToeUi.requestMove(board) } returns nextBoard
 
-        val player = Player(ui)
+        val player = Player(ticTacToeUi)
 
         assertEquals(nextBoard, player.move(board))
 
-        verify(exactly = 1) { ui.requestMove(board, null) }
+        verify(exactly = 1) { ticTacToeUi.requestMove(board, null) }
     }
 }

@@ -1,8 +1,8 @@
 package digital.fortisgreen.kotlin.tictactoe
 
-class Player(private val ui: UI) {
+class Player(private val ticTacToeUi: TicTacToeUI) {
 
     fun move(board: Board): Board {
-        return ui.requestMove(board)
+        return ticTacToeUi.requestMove(board)
     }
 }
