@@ -17,7 +17,7 @@ import java.util.stream.Stream
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
-class TicTacToeTest {
+class GameTest {
 
     @Test
     internal fun `a game is active when it has a board that is active`() {
@@ -29,7 +29,7 @@ class TicTacToeTest {
 
         val gameUi = mockk<GameUI>()
 
-        val newGame = TicTacToe(board = board, playerX = playerX, playerO = playerO, gameUI = gameUi)
+        val newGame = Game(board = board, playerX = playerX, playerO = playerO, gameUI = gameUi)
 
         assertTrue(newGame.isActive())
     }
@@ -44,7 +44,7 @@ class TicTacToeTest {
 
         val gameUi = mockk<GameUI>()
 
-        val game = TicTacToe(board = board, playerX = playerX, playerO = playerO, gameUI = gameUi)
+        val game = Game(board = board, playerX = playerX, playerO = playerO, gameUI = gameUi)
 
         assertFalse(game.isActive())
     }
@@ -101,7 +101,7 @@ class TicTacToeTest {
 
         val gameUi = mockk<GameUI>()
 
-        val game = TicTacToe(board = board, playerX = playerX, playerO = playerO, gameUI = gameUi)
+        val game = Game(board = board, playerX = playerX, playerO = playerO, gameUI = gameUi)
 
         game.playNextMove()
         game.playNextMove()
@@ -134,7 +134,7 @@ class TicTacToeTest {
 
         val gameUi = mockk<GameUI>()
 
-        val game = TicTacToe(board = board, playerX = playerX, playerO = playerO, gameUI = gameUi)
+        val game = Game(board = board, playerX = playerX, playerO = playerO, gameUI = gameUi)
 
         assertThrows<GameNotOverException> {
             game.finish()
@@ -150,7 +150,7 @@ class TicTacToeTest {
         val gameUi = mockk<GameUI>()
         every { gameUi.endGame(board) } just Runs
 
-        val game = TicTacToe(board = board, playerX = playerX, playerO = playerO, gameUI = gameUi)
+        val game = Game(board = board, playerX = playerX, playerO = playerO, gameUI = gameUi)
 
         game.finish()
 

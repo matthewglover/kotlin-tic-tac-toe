@@ -19,18 +19,18 @@ class TicTacToeRunner(ui: TicTacToeUI) {
         try {
             val gameType = gameSelectionUI.requestGameType(gameTypes)
 
-            val ticTacToe = TicTacToe(
+            val game = Game(
                 board = Board.Empty,
                 playerX = Player(gameUI),
                 playerO = Player(gameUI),
                 gameUI = gameUI
             )
 
-            while (ticTacToe.isActive()) {
-                ticTacToe.playNextMove()
+            while (game.isActive()) {
+                game.playNextMove()
             }
 
-            ticTacToe.finish()
+            game.finish()
         } catch (exception: TicTacToeException) {
             println("Oops, something's gone wrong: ${exception.message}".asErrorMessage())
         }
