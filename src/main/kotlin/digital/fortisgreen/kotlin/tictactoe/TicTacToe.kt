@@ -7,7 +7,7 @@ class TicTacToe(
     private var board: Board,
     private val playerX: Player,
     private val playerO: Player,
-    private val ticTacToeUi: TicTacToeUI
+    private val gameUI: GameUI
 ) {
 
     fun isActive(): Boolean = board.isActive()
@@ -28,6 +28,6 @@ class TicTacToe(
             throw GameNotOverException("Cannot finish game when it is still active")
         }
 
-        ticTacToeUi.endGame(board)
+        gameUI.endGame(board)
     }
 }
