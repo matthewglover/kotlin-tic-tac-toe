@@ -1,3 +1,3 @@
 package digital.fortisgreen.kotlin.tictactoe.exceptions
 
-class LineCreationException(message: String) : RuntimeException(message), TicTacToeException
+class LineCreationException(message: String) : TicTacToeException(message)

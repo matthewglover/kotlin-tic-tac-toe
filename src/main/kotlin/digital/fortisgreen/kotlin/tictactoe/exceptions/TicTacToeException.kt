@@ -1,3 +1,3 @@
 package digital.fortisgreen.kotlin.tictactoe.exceptions
 
-sealed interface TicTacToeException
+sealed class TicTacToeException(message: String) : RuntimeException(message)

@@ -1,3 +1,3 @@
 package digital.fortisgreen.kotlin.tictactoe.exceptions
 
-class InvalidBoardCreationException(message: String) : RuntimeException(message), TicTacToeException
+class InvalidBoardCreationException(message: String) : TicTacToeException(message)
