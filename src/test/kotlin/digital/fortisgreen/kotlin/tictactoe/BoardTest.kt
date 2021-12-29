@@ -46,7 +46,7 @@ internal class BoardTest {
     }
 
     @Test
-    internal fun `creating a board with more Ys than Xs throws InvalidBoardCreationException`() {
+    internal fun `creating a board with more Os than Xs throws InvalidBoardCreationException`() {
         assertThrows<InvalidBoardCreationException> {
             Board(
                 state = listOf(
@@ -59,7 +59,7 @@ internal class BoardTest {
     }
 
     @Test
-    internal fun `creating a board with more than one extra X compared to Ys throws InvalidBoardCreationException`() {
+    internal fun `creating a board with more than one extra X compared to Os throws InvalidBoardCreationException`() {
         assertThrows<InvalidBoardCreationException> {
             Board(
                 state = listOf(
@@ -73,15 +73,12 @@ internal class BoardTest {
 
     @Test
     internal fun `an empty board is active`() {
-        val board = Board.Empty
-        assertTrue(board.isActive())
+        assertTrue(Board.Empty.isActive())
     }
 
     @Test
     internal fun `a board with all squares filled is not active`() {
-        val board = completeBoard
-
-        assertFalse(board.isActive())
+        assertFalse(completeBoard.isActive())
     }
 
     @ParameterizedTest
@@ -102,38 +99,7 @@ internal class BoardTest {
     }
 
     @Test
-    internal fun `next player is 'O' when number of squares taken is odd`() {
-        val board = Board(
-            state = listOf(
-                null, null, null,
-                null, PlayerMark.X, null,
-                null, null, null
-            )
-        )
-
-        assertEquals(PlayerMark.O, board.nextPlayer())
-    }
-
-    @Test
-    internal fun `next player is null when board has winner`() {
-        assertNull(completeBoard.nextPlayer())
-    }
-
-    @Test
-    internal fun `next player is null when board is complete`() {
-        val winningBoard = Board(
-            state = listOf(
-                null, PlayerMark.X, PlayerMark.O,
-                null, PlayerMark.X, PlayerMark.O,
-                null, PlayerMark.X, null,
-            )
-        )
-
-        assertNull(winningBoard.nextPlayer())
-    }
-
-    @Test
-    internal fun `next player is 'X' when number of squares taken is even`() {
+    internal fun `next player is 'X' when the number of squares taken is even`() {
         val board = Board(
             state = listOf(
                 null, null, null,
@@ -146,7 +112,38 @@ internal class BoardTest {
     }
 
     @Test
-    internal fun `making a valid move return new board with square taken by next player`() {
+    internal fun `next player is 'O' when the number of squares taken is odd`() {
+        val board = Board(
+            state = listOf(
+                null, null, null,
+                null, PlayerMark.X, null,
+                null, null, null
+            )
+        )
+
+        assertEquals(PlayerMark.O, board.nextPlayer())
+    }
+
+    @Test
+    internal fun `next player is null when the board has a winner`() {
+        assertNull(completeBoard.nextPlayer())
+    }
+
+    @Test
+    internal fun `next player is null when the board is complete`() {
+        val winningBoard = Board(
+            state = listOf(
+                null, PlayerMark.X, PlayerMark.O,
+                null, PlayerMark.X, PlayerMark.O,
+                null, PlayerMark.X, null,
+            )
+        )
+
+        assertNull(winningBoard.nextPlayer())
+    }
+
+    @Test
+    internal fun `making a valid move returns a new board with the square taken by the next player`() {
         val board = Board(
             state = listOf(
                 null, null, null,
@@ -168,7 +165,7 @@ internal class BoardTest {
 
     @ParameterizedTest
     @ValueSource(ints = [5, 6])
-    internal fun `making a move to a taken square returns a right of SquareTaken`(square: Int) {
+    internal fun `making a move to a taken square returns a Right of SquareTaken`(square: Int) {
         val board = Board(
             state = listOf(
                 null, null, null,
@@ -182,18 +179,18 @@ internal class BoardTest {
 
     @ParameterizedTest
     @ValueSource(ints = [0, 10, -1])
-    internal fun `making a move to a square out of range returns a right of OutOfBounds`(square: Int) {
+    internal fun `making a move to a square out of range returns a Right of OutOfBounds`(square: Int) {
         assertEquals(OutOfBounds(square).left(), Board.Empty.move(square))
     }
 
     @Test
-    internal fun `making a null move returns right of UnreadableInput`() {
+    internal fun `making a null move returns Right of UnreadableInput`() {
         assertEquals(UnreadableInput.left(), Board.Empty.move(null))
     }
 
     @ParameterizedTest
     @MethodSource("provideWinningBoards")
-    internal fun `a winning board reports winner`(expected: PlayerMark, board: Board) {
+    internal fun `a winning board reports the winner`(expected: PlayerMark, board: Board) {
         assertEquals(expected, board.winner())
     }
 

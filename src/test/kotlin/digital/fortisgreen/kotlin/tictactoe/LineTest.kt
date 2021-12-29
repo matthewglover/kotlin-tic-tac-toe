@@ -4,6 +4,7 @@ import digital.fortisgreen.kotlin.tictactoe.exceptions.LineCreationException
 import org.junit.jupiter.api.Assertions.assertDoesNotThrow
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
@@ -28,29 +29,20 @@ internal class LineTest {
     internal fun `reports winner when X wins`() {
         val line = Line(listOf(PlayerMark.X, PlayerMark.X, PlayerMark.X))
         assertTrue(line.isWinner())
+        assertEquals(PlayerMark.X, line.playerMark())
     }
 
     @Test
     internal fun `reports winner when O wins`() {
         val line = Line(listOf(PlayerMark.O, PlayerMark.O, PlayerMark.O))
         assertTrue(line.isWinner())
+        assertEquals(PlayerMark.O, line.playerMark())
     }
 
     @Test
     internal fun `does not report winner when no winner`() {
         val line = Line(listOf(null, null, null))
         assertFalse(line.isWinner())
-    }
-
-    @Test
-    internal fun `reports X when it is the winner`() {
-        val line = Line(listOf(PlayerMark.X, PlayerMark.X, PlayerMark.X))
-        assertEquals(PlayerMark.X, line.playerMark())
-    }
-
-    @Test
-    internal fun `reports O when it is the winner`() {
-        val line = Line(listOf(PlayerMark.O, PlayerMark.O, PlayerMark.O))
-        assertEquals(PlayerMark.O, line.playerMark())
+        assertNull(line.playerMark())
     }
 }
