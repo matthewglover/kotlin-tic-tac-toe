@@ -10,11 +10,10 @@ class GameSelectionUI {
         clearScreen()
         displayGameTypes(gameTypes)
         errorMessage?.run { displayInvalidGameTypeTip(errorMessage) }
-        val gameTypeInput = requestGameTypeInput()
 
-        return toGameType(gameTypes, gameTypeInput)
+        return toGameType(gameTypes, requestGameTypeInput())
             .fold(
-                { errorMessage -> requestGameType(gameTypes, errorMessage) },
+                { newErrorMessage -> requestGameType(gameTypes, newErrorMessage) },
                 { it }
             )
     }
